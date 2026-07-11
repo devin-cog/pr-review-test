@@ -56,6 +56,7 @@ import {
 } from "@/modules/sidebar/components/Breadcrumbs";
 import { CommitsList, CommitsListSkeleton } from "../components/CommitsList";
 import { HideCommentBoxesContext } from "../components/DiffViewer/contexts/HideCommentBoxesContext";
+import { HideWhitespaceContext } from "../components/DiffViewer/contexts/HideWhitespaceContext";
 import { ViewModeContext } from "../components/DiffViewer/contexts/ViewModeContext";
 import type { CommentLocation } from "../components/DiffViewer/types";
 import { ExternalFileOverlay } from "../components/ExternalFileOverlay";
@@ -376,6 +377,10 @@ export function ViewModeContextProvider({
     "true" | "false"
   >("pr-digest-hide-comment-boxes", "false");
 
+  const [hideWhitespace, setHideWhitespace] = useLocalStorageState<
+    "true" | "false"
+  >("pr-digest-hide-whitespace", "false");
+
   return (
     <ViewModeContext.Provider
       value={{ mode: viewMode, setViewMode, splitViewDisabled: isMobile }}
@@ -387,7 +392,15 @@ export function ViewModeContextProvider({
             setHideCommentBoxes(hide ? "true" : "false"),
         }}
       >
-        {children}
+        <HideWhitespaceContext.Provider
+          value={{
+            hideWhitespace: hideWhitespace === "true",
+            setHideWhitespace: (hide: boolean) =>
+              setHideWhitespace(hide ? "true" : "false"),
+          }}
+        >
+          {children}
+        </HideWhitespaceContext.Provider>
       </HideCommentBoxesContext.Provider>
     </ViewModeContext.Provider>
   );

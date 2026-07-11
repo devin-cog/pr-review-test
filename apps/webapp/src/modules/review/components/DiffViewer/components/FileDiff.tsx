@@ -30,6 +30,7 @@ import {
 import { isFileChangeDefaultHidden } from "@/modules/review/utils/largeDiff";
 import { cn } from "@/utils/cn";
 import { useScrollRegistry } from "../../../hooks/useScrollRegistry";
+import { useHideWhitespace } from "../contexts/HideWhitespaceContext";
 import { useViewMode } from "../contexts/ViewModeContext";
 import { useDiffLines, useFileHighlight } from "../hooks";
 import { useLinesAndStats } from "../hooks/useDiffLines";
@@ -379,6 +380,7 @@ export const FileDiff = memo(function FileDiff({
   });
 
   const viewMode = useViewMode();
+  const hideWhitespace = useHideWhitespace();
 
   const { displayItems, fileLineCounts } = useDiffLines({
     fileChange,
@@ -386,6 +388,7 @@ export const FileDiff = memo(function FileDiff({
     beforeContent: effectiveBeforeContent,
     allChangesInFile,
     viewMode,
+    hideWhitespace,
   });
 
   // Depend on the primitive counts rather than the fileLineCounts object:

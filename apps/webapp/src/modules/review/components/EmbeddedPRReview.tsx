@@ -64,6 +64,7 @@ import { htmlUrlToPrPath, parsePrPath } from "../utils/prPath";
 import { DiffTabContent } from "./DiffTabContent";
 import type { DiffViewMode } from "./DiffViewer/components/FileDiff";
 import { HideCommentBoxesContext } from "./DiffViewer/contexts/HideCommentBoxesContext";
+import { HideWhitespaceContext } from "./DiffViewer/contexts/HideWhitespaceContext";
 import { ViewModeContext } from "./DiffViewer/contexts/ViewModeContext";
 import type { CommentLocation } from "./DiffViewer/types";
 import { EmbeddedBugsPanel } from "./EmbeddedBugsPanel";
@@ -549,6 +550,17 @@ function EmbeddedPRContent({
     }),
     [hideCommentBoxes, setHideCommentBoxes]
   );
+  const [hideWhitespace, setHideWhitespace] = useLocalStorageState<
+    "true" | "false"
+  >("pr-digest-hide-whitespace", "false");
+  const hideWhitespaceCtx = useMemo(
+    () => ({
+      hideWhitespace: hideWhitespace === "true",
+      setHideWhitespace: (hide: boolean) =>
+        setHideWhitespace(hide ? "true" : "false"),
+    }),
+    [hideWhitespace, setHideWhitespace]
+  );
 
   const switchToDiffTab = useCallback(() => {
     changeTab("diff");
@@ -777,88 +789,92 @@ function EmbeddedPRContent({
   return (
     <LazyFileContext.Provider value={requestFiles}>
       <HideCommentBoxesContext.Provider value={hideCommentBoxesCtx}>
-        <div className={cn("relative flex min-h-0 flex-1 flex-col", className)}>
+        <HideWhitespaceContext.Provider value={hideWhitespaceCtx}>
           <div
-            ref={scrollRef}
-            className={cn(
-              "flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden bg-bg-page",
-              // Scroll padding matches the pinned stack of the visible tab: the
-              // diff tab pins the tab bar + section header, other tabs only the tab bar.
-              activeTab === "diff" ? "scroll-pt-24" : "scroll-pt-12"
-            )}
+            className={cn("relative flex min-h-0 flex-1 flex-col", className)}
           >
-            <EmbeddedPRHeader
-              prState={prState}
-              isWindsurfEmbedded={isWindsurfEmbedded}
-              isAuthenticated={isAuthenticated}
-              canEdit={canEdit}
-            />
+            <div
+              ref={scrollRef}
+              className={cn(
+                "flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden bg-bg-page",
+                // Scroll padding matches the pinned stack of the visible tab: the
+                // diff tab pins the tab bar + section header, other tabs only the tab bar.
+                activeTab === "diff" ? "scroll-pt-24" : "scroll-pt-12"
+              )}
+            >
+              <EmbeddedPRHeader
+                prState={prState}
+                isWindsurfEmbedded={isWindsurfEmbedded}
+                isAuthenticated={isAuthenticated}
+                canEdit={canEdit}
+              />
 
-            {isAuthenticated && (
-              <>
-                {prState === "OPEN" && <PRReviewTrialBanner />}
-                <MergeStatusBar
-                  data={mergeStatusData}
-                  owner={owner}
-                  repo={repo}
-                  prNumber={prNumber}
-                  prPath={prPath}
-                  host={host}
-                  cannotInteractWithGitHub={cannotInteractWithGitHub}
-                  requestedReviewers={githubData?.requestedReviewers}
-                  reviewAuthors={githubData?.reviewAuthors}
-                  assignees={githubData?.assignees}
-                  labels={githubData?.labels}
-                  authorLogin={githubData?.author?.login}
-                  reviewMetadataReadOnly={
-                    cannotInteractWithGitHub || !!isWindsurfEmbedded
-                  }
-                  metadataInHovercard
-                  metadataLoading={!githubData}
-                  keepVisibleWhenClosed
-                />
-              </>
-            )}
+              {isAuthenticated && (
+                <>
+                  {prState === "OPEN" && <PRReviewTrialBanner />}
+                  <MergeStatusBar
+                    data={mergeStatusData}
+                    owner={owner}
+                    repo={repo}
+                    prNumber={prNumber}
+                    prPath={prPath}
+                    host={host}
+                    cannotInteractWithGitHub={cannotInteractWithGitHub}
+                    requestedReviewers={githubData?.requestedReviewers}
+                    reviewAuthors={githubData?.reviewAuthors}
+                    assignees={githubData?.assignees}
+                    labels={githubData?.labels}
+                    authorLogin={githubData?.author?.login}
+                    reviewMetadataReadOnly={
+                      cannotInteractWithGitHub || !!isWindsurfEmbedded
+                    }
+                    metadataInHovercard
+                    metadataLoading={!githubData}
+                    keepVisibleWhenClosed
+                  />
+                </>
+              )}
 
-            <EmbeddedReviewTabs
-              activeTab={activeTab}
-              changeTab={changeTab}
-              sectionTopRef={sectionTopRef}
-              scrollTabRowToTop={scrollTabRowToTop}
-              jobs={jobs}
-              currentJobId={currentJobId}
-              newerJobAvailable={newerJobAvailable}
-              switchToNewerJob={handleSwitchToNewerJob}
-              hasNewerVersion={hasNewerVersion}
-              switchToLatestVersion={handleSwitchToLatestVersion}
-              canEdit={canEdit}
-              overviewText={overview?.text}
-              isOverviewErrored={
-                isErrored || digestData?.errored_tasks?.includes("groups")
-              }
-              hasNoJobs={hasNoJobs}
-              diffTabContent={diffTabContent}
-              bugsContent={bugsContent}
-              bugsCount={bugsCount}
-              commitsLaunchJob={handleCommitsLaunchJob}
-              commitsSelectJob={handleCommitsSelectJob}
-              isCommitsLoading={_isDigestLoading}
-              isWindsurfEmbedded={isWindsurfEmbedded}
-            />
-          </div>
-          {fileOverlay.isOpen && fileOverlay.file && (
-            <div className="absolute inset-0 z-40 bg-bg-page">
-              <ExternalFileOverlay
-                onClose={closeFileOverlay}
-                file={fileOverlay.file}
-                isLoading={fileOverlay.isLoading}
-                error={fileOverlay.error}
-                comments={fileOverlay.comments}
-                commentRenderers={commentRenderers}
+              <EmbeddedReviewTabs
+                activeTab={activeTab}
+                changeTab={changeTab}
+                sectionTopRef={sectionTopRef}
+                scrollTabRowToTop={scrollTabRowToTop}
+                jobs={jobs}
+                currentJobId={currentJobId}
+                newerJobAvailable={newerJobAvailable}
+                switchToNewerJob={handleSwitchToNewerJob}
+                hasNewerVersion={hasNewerVersion}
+                switchToLatestVersion={handleSwitchToLatestVersion}
+                canEdit={canEdit}
+                overviewText={overview?.text}
+                isOverviewErrored={
+                  isErrored || digestData?.errored_tasks?.includes("groups")
+                }
+                hasNoJobs={hasNoJobs}
+                diffTabContent={diffTabContent}
+                bugsContent={bugsContent}
+                bugsCount={bugsCount}
+                commitsLaunchJob={handleCommitsLaunchJob}
+                commitsSelectJob={handleCommitsSelectJob}
+                isCommitsLoading={_isDigestLoading}
+                isWindsurfEmbedded={isWindsurfEmbedded}
               />
             </div>
-          )}
-        </div>
+            {fileOverlay.isOpen && fileOverlay.file && (
+              <div className="absolute inset-0 z-40 bg-bg-page">
+                <ExternalFileOverlay
+                  onClose={closeFileOverlay}
+                  file={fileOverlay.file}
+                  isLoading={fileOverlay.isLoading}
+                  error={fileOverlay.error}
+                  comments={fileOverlay.comments}
+                  commentRenderers={commentRenderers}
+                />
+              </div>
+            )}
+          </div>
+        </HideWhitespaceContext.Provider>
       </HideCommentBoxesContext.Provider>
     </LazyFileContext.Provider>
   );

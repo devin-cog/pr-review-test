@@ -32,6 +32,10 @@ import {
   useSetHideCommentBoxes,
 } from "./DiffViewer/contexts/HideCommentBoxesContext";
 import {
+  useHideWhitespace,
+  useSetHideWhitespace,
+} from "./DiffViewer/contexts/HideWhitespaceContext";
+import {
   useSetViewMode,
   useSplitViewDisabled,
   useViewMode,
@@ -87,6 +91,8 @@ function DiffSettingsMenu() {
   const splitViewDisabled = useSplitViewDisabled();
   const hideCommentBoxes = useHideCommentBoxes();
   const setHideCommentBoxes = useSetHideCommentBoxes();
+  const hideWhitespace = useHideWhitespace();
+  const setHideWhitespace = useSetHideWhitespace();
 
   return (
     <Menu>
@@ -130,6 +136,18 @@ function DiffSettingsMenu() {
               );
             })}
           </MenuRadioGroup>
+          <MenuSeparator />
+          <MenuCheckboxItem
+            checked={hideWhitespace}
+            onCheckedChange={(checked) => {
+              analytics.track("Review:Settings:HideWhitespace", {
+                hide: checked,
+              });
+              setHideWhitespace(checked);
+            }}
+          >
+            {t("common.hideWhitespace")}
+          </MenuCheckboxItem>
         </MenuGroup>
         <MenuSeparator />
         <MenuGroup>
