@@ -17,6 +17,7 @@ import type {
   ExpandedReferenceData,
   FileChange,
 } from "../types";
+import { hideWhitespaceInDisplayItems } from "../utils/whitespaceDiff";
 
 interface UseDiffLinesOptions {
   fileChange: FileChange;
@@ -24,6 +25,7 @@ interface UseDiffLinesOptions {
   expandedRegions?: Set<string>;
   viewMode: "split" | "unified";
   beforeContent?: FileContentAtBase | null;
+  hideWhitespace?: boolean;
 }
 
 interface UseDiffLinesResult {
@@ -46,7 +48,10 @@ export function hunkToLines(
   {
     isMainDiff = true,
     addedFirst = false,
-  }: { isMainDiff?: boolean; addedFirst?: boolean } = {}
+  }: {
+    isMainDiff?: boolean;
+    addedFirst?: boolean;
+  } = {}
 ): DiffLine[] {
   const lines: DiffLine[] = [];
   const beforeEmpty =
@@ -708,6 +713,7 @@ export function useDiffLines({
   allChangesInFile,
   viewMode,
   beforeContent = null,
+  hideWhitespace = false,
 }: UseDiffLinesOptions): UseDiffLinesResult {
   expandedRegions = expandedRegions ?? new Set();
   const expandedReferences = useExpandedReferencesForFile(fileChange.file_path);
@@ -751,6 +757,13 @@ export function useDiffLines({
       fileLineCounts = { before, after };
     }
 
+    if (hideWhitespace) {
+      displayItems = hideWhitespaceInDisplayItems(
+        displayItems,
+        viewMode === "split"
+      );
+    }
+
     return { displayItems, fileLineCounts };
   }, [
     fileChange,
@@ -759,5 +772,6 @@ export function useDiffLines({
     allChangesInFile,
     expandedReferences,
     viewMode,
+    hideWhitespace,
   ]);
 }

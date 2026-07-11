@@ -87,6 +87,10 @@ import {
   useSetHideCommentBoxes,
 } from "./DiffViewer/contexts/HideCommentBoxesContext";
 import {
+  useHideWhitespace,
+  useSetHideWhitespace,
+} from "./DiffViewer/contexts/HideWhitespaceContext";
+import {
   useSetViewMode,
   useViewMode,
 } from "./DiffViewer/contexts/ViewModeContext";
@@ -199,6 +203,8 @@ export function DiffSettingsMenu({
   const setViewMode = useSetViewMode();
   const hideCommentBoxes = useHideCommentBoxes();
   const setHideCommentBoxes = useSetHideCommentBoxes();
+  const hideWhitespace = useHideWhitespace();
+  const setHideWhitespace = useSetHideWhitespace();
 
   return (
     <Menu>
@@ -210,27 +216,41 @@ export function DiffSettingsMenu({
         </MenuTrigger>
       </Tooltip>
       <MenuContent align="end">
+        <MenuGroup>
+          <MenuGroupLabel>{t("common.diffView")}</MenuGroupLabel>
+          {!isMobile && (
+            <MenuRadioGroup
+              value={viewMode}
+              onValueChange={(value) => {
+                analytics.track("Review:Settings:DiffMode", {
+                  mode: value as "split" | "unified",
+                });
+                setViewMode(value as "split" | "unified");
+              }}
+            >
+              {VIEW_MODE_OPTIONS_KEYS.map((option) => (
+                <MenuRadioItem key={option.value} value={option.value}>
+                  {t(option.labelKey)}
+                </MenuRadioItem>
+              ))}
+            </MenuRadioGroup>
+          )}
+          {!isMobile && <MenuSeparator />}
+          <MenuCheckboxItem
+            checked={hideWhitespace}
+            onCheckedChange={(checked) => {
+              analytics.track("Review:Settings:HideWhitespace", {
+                hide: checked,
+              });
+              setHideWhitespace(checked);
+            }}
+          >
+            {t("common.hideWhitespace")}
+          </MenuCheckboxItem>
+        </MenuGroup>
+        <MenuSeparator />
         {!isMobile && (
           <>
-            <MenuGroup>
-              <MenuGroupLabel>{t("common.diffView")}</MenuGroupLabel>
-              <MenuRadioGroup
-                value={viewMode}
-                onValueChange={(value) => {
-                  analytics.track("Review:Settings:DiffMode", {
-                    mode: value as "split" | "unified",
-                  });
-                  setViewMode(value as "split" | "unified");
-                }}
-              >
-                {VIEW_MODE_OPTIONS_KEYS.map((option) => (
-                  <MenuRadioItem key={option.value} value={option.value}>
-                    {t(option.labelKey)}
-                  </MenuRadioItem>
-                ))}
-              </MenuRadioGroup>
-            </MenuGroup>
-            <MenuSeparator />
             <MenuGroup>
               <MenuGroupLabel>{t("common.commentLocation")}</MenuGroupLabel>
               <MenuRadioGroup

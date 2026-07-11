@@ -202,6 +202,9 @@ interface LegacyAnalyticsSchema {
   ["Review:Settings:HideCommentBoxes"]: {
     hide: boolean;
   };
+  ["Review:Settings:HideWhitespace"]: {
+    hide: boolean;
+  };
   ["Review:CopyBranch"]: {
     owner: string;
     repo: string;

@@ -738,6 +738,7 @@
     "files": "ファイル",
     "floating": "フローティング",
     "hideHighlights": "ハイライトを非表示",
+    "hideWhitespace": "空白を非表示",
     "hybrid": "ハイブリッド",
     "inline": "インライン",
     "join": "参加",

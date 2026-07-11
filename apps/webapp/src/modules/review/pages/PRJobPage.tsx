@@ -15,6 +15,7 @@ import { LoadingSpinner } from "@/modules/layout/component/PageLoader";
 import { SidebarContentReviewPR } from "@/modules/sidebar-new/components/SidebarContentReview";
 import { HeaderActions } from "@/modules/sidebar/components/Breadcrumbs";
 import { HideCommentBoxesContext } from "../components/DiffViewer/contexts/HideCommentBoxesContext";
+import { HideWhitespaceContext } from "../components/DiffViewer/contexts/HideWhitespaceContext";
 import { ViewModeContext } from "../components/DiffViewer/contexts/ViewModeContext";
 import type { CommentLocation } from "../components/DiffViewer/types";
 import { ExternalFileOverlay } from "../components/ExternalFileOverlay";
@@ -168,6 +169,9 @@ export function PRJobPage({ jobId }: PRJobPageProps) {
   const [hideCommentBoxes, setHideCommentBoxes] = useLocalStorageState<
     "true" | "false"
   >("pr-digest-hide-comment-boxes", "false");
+  const [hideWhitespace, setHideWhitespace] = useLocalStorageState<
+    "true" | "false"
+  >("pr-digest-hide-whitespace", "false");
   const [_commentLocation, setCommentLocation] =
     useLocalStorageState<CommentLocation>(
       "pr-digest-comment-location",
@@ -396,23 +400,31 @@ export function PRJobPage({ jobId }: PRJobPageProps) {
                   setHideCommentBoxes(hide ? "true" : "false"),
               }}
             >
-              <PRJobPageContent
-                owner={owner}
-                repo={repo}
-                prNumber={String(prNumber)}
-                jobId={jobId}
-                token={token}
-                digestData={{
-                  ...jobData,
-                  cliJobId: jobId,
+              <HideWhitespaceContext.Provider
+                value={{
+                  hideWhitespace: hideWhitespace === "true",
+                  setHideWhitespace: (hide: boolean) =>
+                    setHideWhitespace(hide ? "true" : "false"),
                 }}
-                commentLocation={commentLocation}
-                setCommentLocation={setCommentLocation}
-                isJobRunning={everSawJobRunning && isJobRunning}
-                isJobErrored={everSawJobRunning && isJobErrored}
-                refetchJob={refetch}
-                lifeguardProgress={lifeguardProgress}
-              />
+              >
+                <PRJobPageContent
+                  owner={owner}
+                  repo={repo}
+                  prNumber={String(prNumber)}
+                  jobId={jobId}
+                  token={token}
+                  digestData={{
+                    ...jobData,
+                    cliJobId: jobId,
+                  }}
+                  commentLocation={commentLocation}
+                  setCommentLocation={setCommentLocation}
+                  isJobRunning={everSawJobRunning && isJobRunning}
+                  isJobErrored={everSawJobRunning && isJobErrored}
+                  refetchJob={refetch}
+                  lifeguardProgress={lifeguardProgress}
+                />
+              </HideWhitespaceContext.Provider>
             </HideCommentBoxesContext.Provider>
           </ViewModeContext.Provider>
         </ScrollRegistryProvider>
