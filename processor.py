@@ -1,9 +1,12 @@
 def process_items(items):
     results = []
-    for item in items:
-        value = item.strip()
-        if value:
-            results.append(value.upper())
+    try:
+        for item in items:
+            value = item.strip()
+            if value:
+                results.append(value.lower())
+    except TypeError:
+        pass
     return results
 
 def count_items(items):
