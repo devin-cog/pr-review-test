@@ -20,6 +20,10 @@ def base_5(a, b):
     """Base function 5."""
     return a * b + 5
 
+def added_top(a):
+    """Added block one."""
+    return a + 100
+
 def base_6(a, b):
     """Base function 6."""
     return a * b + 6
@@ -79,6 +83,10 @@ def base_19(a, b):
 def base_20(a, b):
     """Base function 20."""
     return a * b + 20
+
+def added_bottom(a):
+    """Added block two."""
+    return a + 200
 
 def base_21(a, b):
     """Base function 21."""
