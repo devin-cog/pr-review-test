@@ -13,7 +13,7 @@ def multiply(a, b):
 def divide(a, b):
     return a / b
 
-
+# pending-guard-test
 def power(a, b):
     return a ** b
 
