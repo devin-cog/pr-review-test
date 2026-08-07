@@ -4,13 +4,14 @@ This introductory paragraph stays exactly the same in both versions, so it rende
 
 ## Section To Modify
 
-This paragraph will be modified by the pull request, so it should render as a modified block.
+This paragraph has been rewritten by the pull request with brand new wording, so it renders as a modified block.
 
-## Section To Remove
+## Brand New Section
 
-This entire section is deleted by the pull request, so it should render as removed-only blocks.
+This section is newly added by the pull request, so it should render as added blocks.
 
-This second removed paragraph also disappears entirely in the new version.
+- first newly added bullet point
+- second newly added bullet point
 
 ## Tail Section
 
