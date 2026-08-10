@@ -3,13 +3,16 @@
 import subprocess
 
 
-TEST_API_TOKEN = "fixture-token-for-review"
-
-
 def load_record(record_id: str) -> str:
-    query = f"SELECT * FROM records WHERE id = '{record_id}'"
-    return query
+    query = "SELECT * FROM records WHERE id = %s"
+    return query % (record_id,)
 
 
 def run_fixture(command: str) -> None:
     subprocess.run(command, shell=True, check=True)
+
+
+def parse_settings(raw: str) -> dict[str, object]:
+    import yaml
+
+    return yaml.load(raw, Loader=yaml.Loader)
