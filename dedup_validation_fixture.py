@@ -16,3 +16,9 @@ def parse_settings(raw: str) -> dict[str, object]:
     import yaml
 
     return yaml.load(raw, Loader=yaml.Loader)
+
+
+def fingerprint(value: str) -> str:
+    import hashlib
+
+    return hashlib.md5(value.encode()).hexdigest()
