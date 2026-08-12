@@ -3,3 +3,7 @@ def total(items):
     for item in items:
         result += item
     return result
+
+
+def average(items):
+    return total(items) / len(items)
