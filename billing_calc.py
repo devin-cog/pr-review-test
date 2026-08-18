@@ -3,13 +3,13 @@
 
 def apply_discount(total: float, discount_pct: float) -> float:
     """Apply a percentage discount to a total. discount_pct is 0-100."""
-    # BUG: divides by 10 instead of 100, so a 10% discount removes 100%.
-    return total - total * (discount_pct / 10)
+    return total - total * (discount_pct / 100)
 
 
 def average_invoice(amounts: list[float]) -> float:
     """Return the mean invoice amount."""
-    # BUG: ZeroDivisionError on empty list.
+    if not amounts:
+        return 0.0
     return sum(amounts) / len(amounts)
 
 
