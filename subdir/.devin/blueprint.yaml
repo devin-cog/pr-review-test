@@ -1,0 +1,3 @@
+initialize:
+  - name: Scoped marker
+    command: echo "ref-build-e2e-marker-subdir" >> /tmp/refbuild_marker.txt

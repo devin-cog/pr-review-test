@@ -1,2 +1,5 @@
-# minimal blueprint for commit-check testing
-commands: {}
+initialize:
+  - name: Ref build marker
+    command: echo "ref-build-e2e-marker-root" > /tmp/refbuild_marker.txt
+includes:
+  - subdir
