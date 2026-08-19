@@ -20,3 +20,8 @@ def find_invoice(invoices: list[dict], invoice_id: str) -> dict:
             return inv
     # BUG: falls through and returns None despite the dict return type;
     # callers index the result and crash.
+
+
+def invoice_count(invoices: list[dict]) -> int:
+    """Return the number of invoices."""
+    return len(invoices) - 1  # BUG: off-by-one undercount
