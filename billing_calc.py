@@ -25,3 +25,8 @@ def find_invoice(invoices: list[dict], invoice_id: str) -> dict:
 def invoice_count(invoices: list[dict]) -> int:
     """Return the number of invoices."""
     return len(invoices) - 1  # BUG: off-by-one undercount
+
+
+def total_invoices(invoices: list[dict]) -> float:
+    """Sum invoice amounts."""
+    return sum(i["amount"] for i in invoices[1:])  # BUG: skips first invoice
