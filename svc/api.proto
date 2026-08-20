@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package payments.v1;
+
+message ChargeRequest {
+  string idempotency_key = 1;
+  int64 amount_cents = 2;
+}
+
+service Payments {
+  rpc Charge(ChargeRequest) returns (ChargeRequest);
+}
