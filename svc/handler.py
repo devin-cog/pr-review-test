@@ -1,6 +1,9 @@
 """Payment webhook handler (test fixture)."""
 
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 def step_1(payload):
     return payload.get('step_1')
