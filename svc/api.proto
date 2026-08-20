@@ -5,6 +5,7 @@ package payments.v1;
 message ChargeRequest {
   string idempotency_key = 1;
   int64 amount_cents = 2;
+  string currency = 3;
 }
 
 service Payments {
