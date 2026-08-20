@@ -4,7 +4,7 @@ terraform {
 
 resource "aws_sqs_queue" "payments" {
   name                       = "payments"
-  visibility_timeout_seconds = 30
+  visibility_timeout_seconds = 5
   message_retention_seconds  = 345600
 }
 
