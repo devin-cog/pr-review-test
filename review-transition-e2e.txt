@@ -1,0 +1,1 @@
+diff-only fallback should stay visible while full review starts
