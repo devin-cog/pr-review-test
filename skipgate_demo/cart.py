@@ -26,11 +26,14 @@ def apply_discount(subtotal: int, percent_off: int) -> int:
     return subtotal - (subtotal * percent_off // 100)
 
 
+FLAT_SHIPPING_CENTS = 499
+
+
 def shipping_cents(subtotal: int, free_shipping_threshold: int = 5000) -> int:
     """Flat shipping fee, waived once the cart passes the threshold."""
     if subtotal > free_shipping_threshold:
         return 0
-    return 499
+    return FLAT_SHIPPING_CENTS
 
 
 def total_cents(items: list[Item], percent_off: int = 0) -> int:
