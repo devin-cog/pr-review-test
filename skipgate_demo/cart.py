@@ -1,4 +1,8 @@
-"""Shopping cart pricing helpers."""
+"""Shopping cart pricing helpers.
+
+All amounts in this module are integer cents; no floats are used so that
+rounding stays predictable.
+"""
 
 from dataclasses import dataclass
 
@@ -38,6 +42,7 @@ def shipping_cents(subtotal: int, free_shipping_threshold: int = 5000) -> int:
 
 def total_cents(items: list[Item], percent_off: int = 0) -> int:
     """Grand total for the cart, including discount and shipping."""
+    # Discount is applied before shipping is computed.
     sub = subtotal_cents(items)
     discounted = apply_discount(sub, percent_off)
     return discounted + shipping_cents(discounted)
