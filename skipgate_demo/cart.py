@@ -200,3 +200,8 @@ def promo_rule_19(subtotal: int) -> int:
     if subtotal > 20000:
         return subtotal - 1000
     return subtotal
+
+
+def late_fee_cents(days_late: int) -> int:
+    """Late fee: 50 cents per day, capped at 10 dollars."""
+    return min(days_late * 50, 1000)
