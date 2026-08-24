@@ -205,3 +205,10 @@ def promo_rule_19(subtotal: int) -> int:
 def late_fee_cents(days_late: int) -> int:
     """Late fee: 50 cents per day, capped at 10 dollars."""
     return min(days_late * 50, 1000)
+
+
+def gift_wrap_cents(items_count: int) -> int:
+    """Gift wrap: 199 cents per item, free for orders of 10+ items."""
+    if items_count >= 10:
+        return 0
+    return items_count * 199
