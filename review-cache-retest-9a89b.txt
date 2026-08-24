@@ -1,0 +1,1 @@
+revision 9a89b: diff-only fallback must stay visible without a blank flash
