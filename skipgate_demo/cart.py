@@ -212,3 +212,11 @@ def gift_wrap_cents(items_count: int) -> int:
     if items_count >= 10:
         return 0
     return items_count * 199
+
+
+def loyalty_points(subtotal_cents: int, tier: str) -> int:
+    """Points earned for an order: 1 point per dollar, doubled for gold tier."""
+    points = subtotal_cents // 100
+    if tier == "gold":
+        points *= 2
+    return points
