@@ -13,10 +13,13 @@ TAX_RATE_BPS: dict[str, int] = {
 def tax_for(subtotal_cents: int, region: str) -> int:
     """Return the tax owed for ``subtotal_cents`` in ``region``, in cents.
 
-    Unknown regions owe no tax. Negative subtotals (refunds) owe negative tax.
+    Unknown regions owe no tax. Negative subtotals (refunds) owe negative tax,
+    rounded toward zero so a refund never returns more tax than the matching
+    charge collected.
     """
     rate_bps = TAX_RATE_BPS.get(region.upper(), 0)
-    return subtotal_cents * rate_bps // 10_000
+    sign = -1 if subtotal_cents < 0 else 1
+    return sign * (abs(subtotal_cents) * rate_bps // 10_000)
 
 
 def total_with_tax(line_items_cents: list[int], region: str) -> int:

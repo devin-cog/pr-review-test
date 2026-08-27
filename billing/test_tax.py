@@ -9,6 +9,10 @@ def test_tax_for_unknown_region_is_zero():
     assert tax_for(10_000, "ZZ") == 0
 
 
+def test_tax_for_refund_mirrors_charge():
+    assert tax_for(-10_001, "CA") == -tax_for(10_001, "CA")
+
+
 def test_total_with_tax_single_item():
     # 100.00 in CA -> 107.25
     assert total_with_tax([10_000], "CA") == 10_725
