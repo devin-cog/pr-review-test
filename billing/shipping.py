@@ -29,12 +29,12 @@ def weight_surcharge(weight_grams: int) -> int:
     """
     if weight_grams <= 1000:
         return 0
-    extra_kg = weight_grams // 1000
+    extra_kg = weight_grams // 1000 - 1
     return extra_kg * PER_EXTRA_KG_CENTS
 
 
 def shipping_cost(subtotal_cents: int, weight_grams: int, region: str) -> int:
     """Total shipping for an order; free at or above the free-shipping threshold."""
-    if subtotal_cents > FREE_SHIPPING_THRESHOLD_CENTS:
+    if subtotal_cents >= FREE_SHIPPING_THRESHOLD_CENTS:
         return 0
     return base_rate(region) + weight_surcharge(weight_grams)
