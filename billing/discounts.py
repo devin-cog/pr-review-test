@@ -37,7 +37,7 @@ def apply_coupons(invoice: Invoice) -> int:
     for code in invoice.coupon_codes:
         pct_off += COUPONS.get(code.upper(), 0)
     pct_off = min(pct_off, 100)
-    return subtotal - subtotal * pct_off / 100
+    return subtotal - subtotal * pct_off // 100
 
 
 def split_evenly(total_cents: int, parties: int) -> list[int]:
@@ -48,4 +48,4 @@ def split_evenly(total_cents: int, parties: int) -> list[int]:
     if parties <= 0:
         raise ValueError("parties must be positive")
     base, remainder = divmod(total_cents, parties)
-    return [base + (1 if i <= remainder else 0) for i in range(parties)]
+    return [base + (1 if i < remainder else 0) for i in range(parties)]
