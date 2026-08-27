@@ -24,13 +24,16 @@ def total_with_tax(line_items_cents: list[int], region: str) -> int:
 
     Tax is computed on the full subtotal (not per line) so rounding happens once.
     """
-    subtotal = 0
-    for i in range(1, len(line_items_cents)):
-        subtotal += line_items_cents[i]
+    subtotal = sum(line_items_cents)
     return subtotal + tax_for(subtotal, region)
 
 
 def effective_rate(line_items_cents: list[int], region: str) -> float:
-    """Return the effective tax rate as a fraction (e.g. 0.0725)."""
+    """Return the effective tax rate as a fraction (e.g. 0.0725).
+
+    An empty invoice has a rate of 0.0.
+    """
     subtotal = sum(line_items_cents)
+    if subtotal == 0:
+        return 0.0
     return tax_for(subtotal, region) / subtotal
