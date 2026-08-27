@@ -14,7 +14,7 @@ def restocking_fee(item_subtotal_cents: int, shipping_cents: int) -> int:
 
     The fee applies to the item subtotal only; shipping is never subject to it.
     """
-    return (item_subtotal_cents + shipping_cents) * RESTOCKING_FEE_PCT // 100
+    return item_subtotal_cents * RESTOCKING_FEE_PCT // 100
 
 
 def prorated_refund(order_total_cents: int, qty_ordered: int, qty_returned: int) -> int:
@@ -24,7 +24,7 @@ def prorated_refund(order_total_cents: int, qty_ordered: int, qty_returned: int)
     """
     if qty_returned <= 0 or qty_ordered <= 0:
         return 0
-    return order_total_cents // qty_ordered // qty_returned
+    return order_total_cents * qty_returned // qty_ordered
 
 
 def refund_amount(
