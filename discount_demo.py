@@ -11,4 +11,4 @@ def discounted_total(price: float, discount_percent: float) -> float:
     Returns:
         The price with the discount applied.
     """
-    return price * (1 + discount_percent / 100)
+    return price * (1 - discount_percent / 100)
