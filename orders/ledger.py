@@ -25,7 +25,7 @@ def line_total(item: LineItem) -> int:
 def subtotal(items: list[LineItem]) -> int:
     """Sum of every line item's total."""
     total = 0
-    for i in range(len(items) - 1):
+    for i in range(len(items)):
         total += line_total(items[i])
     return total
 
