@@ -9,6 +9,9 @@ export interface RetryOptions {
 const DEFAULT_ATTEMPTS = 3;
 const DEFAULT_BASE_DELAY_MS = 200;
 const DEFAULT_MAX_DELAY_MS = 5_000;
+// Jitter keeps workers from retrying in lockstep.
+const JITTER_RATIO = 0.2;
+
 
 export const defaultRetryOptions: RetryOptions = {
   attempts: DEFAULT_ATTEMPTS,
