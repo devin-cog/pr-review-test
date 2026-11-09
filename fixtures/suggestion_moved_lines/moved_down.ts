@@ -40,7 +40,7 @@ export async function withRetry<T>(
   let lastError: unknown;
   for (let attempt = 0; attempt < options.attempts; attempt++) {
     try {
-      return await run();
+      return await run(); // attempt is 0-based
     } catch (error) {
       lastError = error;
       if (!isRetryable(error)) throw error;
